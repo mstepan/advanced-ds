@@ -4,9 +4,6 @@ import java.time.LocalDate;
 
 public class Patient implements ComparableDimensions<Patient> {
 
-    private static final int LO_DIM_INDEX = 0;
-    private static final int HI_DIM_INDEX = 4;
-
     private final int age;
     private final double bloodPressure;
     private final boolean vaccinated;
@@ -19,6 +16,11 @@ public class Patient implements ComparableDimensions<Patient> {
         this.vaccinated = vaccinated;
         this.gender = gender;
         this.birthDate = birthDate;
+    }
+
+    @Override
+    public int dimensionsCount() {
+        return 5;
     }
 
     @Override
@@ -43,7 +45,7 @@ public class Patient implements ComparableDimensions<Patient> {
                                                               "dimension should be in range [%d ... %d]",
                                                       Patient.class.getCanonicalName(),
                                                       dimIndex,
-                                                      LO_DIM_INDEX, HI_DIM_INDEX));
+                                                      0, dimensionsCount() - 1));
     }
 
     public enum Gender {

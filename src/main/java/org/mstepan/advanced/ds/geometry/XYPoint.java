@@ -2,15 +2,17 @@ package org.mstepan.advanced.ds.geometry;
 
 public class XYPoint implements ComparableDimensions<XYPoint> {
 
-    private static final int LO_DIM_INDEX = 0;
-    private static final int HI_DIM_INDEX = 1;
-
     private final int x;
     private final int y;
 
     public XYPoint(int x, int y) {
         this.x = x;
         this.y = y;
+    }
+
+    @Override
+    public int dimensionsCount() {
+        return 2;
     }
 
     @Override
@@ -30,6 +32,6 @@ public class XYPoint implements ComparableDimensions<XYPoint> {
                                                               "dimension should be in range [%d ... %d]",
                                                       XYPoint.class.getCanonicalName(),
                                                       dimIndex,
-                                                      LO_DIM_INDEX, HI_DIM_INDEX));
+                                                      0, dimensionsCount() - 1));
     }
 }
