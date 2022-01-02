@@ -9,13 +9,13 @@
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 
-        <assertj.version>3.15.0</assertj.version>
+        <assertj.version>3.21.0</assertj.version>
         <error.prone.core.version>2.3.2</error.prone.core.version>
         <java.version>15</java.version>
-        <logback.version>1.1.7</logback.version>
-        <mockito-version>2.21.0</mockito-version>
-        <slf4j.version>1.7.20</slf4j.version>
-        <surefire.plugin.version>3.0.0-M4</surefire.plugin.version>
+        <logback.version>1.2.10</logback.version>
+        <mockito-version>4.2.0</mockito-version>
+        <slf4j.version>1.7.32</slf4j.version>
+        <surefire.plugin.version>3.0.0-M5</surefire.plugin.version>
     </properties>
 
     <build>
@@ -95,20 +95,5 @@
         </dependency>
 
     </dependencies>
-
-<!--    <repositories>-->
-<!--        <repository>-->
-<!--            <id>sonatype-nexus-public</id>-->
-<!--            <name>SonaType public snapshots and releases repository</name>-->
-<!--            <url>https://oss.sonatype.org/content/groups/public</url>-->
-<!--            <releases>-->
-<!--                &lt;!&ndash; set to true if you wish to fetch releases from this repo too. &ndash;&gt;-->
-<!--                <enabled>false</enabled>-->
-<!--            </releases>-->
-<!--            <snapshots>-->
-<!--                <enabled>true</enabled>-->
-<!--            </snapshots>-->
-<!--        </repository>-->
-<!--    </repositories>-->
 
 </project>
