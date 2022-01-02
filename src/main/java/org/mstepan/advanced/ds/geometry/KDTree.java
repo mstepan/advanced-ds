@@ -7,7 +7,6 @@ public class KDTree<T extends ComparableDimensions<T>> {
     private int size;
     private int dimensionsCount = -1;
 
-
     /**
      * Insert new value into K-D tree.
      *
@@ -45,18 +44,6 @@ public class KDTree<T extends ComparableDimensions<T>> {
         return true;
     }
 
-    private void initDimensionsCount(T value) {
-        if (dimensionsCount < 0) {
-            dimensionsCount = value.dimensionsCount();
-        }
-    }
-
-    private void checkNotNull(T value, String errorMsg) {
-        if (value == null) {
-            throw new IllegalArgumentException(errorMsg);
-        }
-    }
-
     public boolean contains(T searchValue) {
         if (searchValue == null || isEmpty()) {
             return false;
@@ -69,22 +56,38 @@ public class KDTree<T extends ComparableDimensions<T>> {
         return isEquals(searchRes.entry.value, searchValue);
     }
 
-    private boolean isEquals(T foundValue, T searchValue) {
-        for (int dim = 0; dim < dimensionsCount; ++dim) {
-            if (foundValue.compareWith(searchValue, dim) != 0) {
-                return false;
-            }
-        }
-
-        return true;
-    }
-
     public int size() {
         return size;
     }
 
     public boolean isEmpty() {
         return size == 0;
+    }
+
+    private void initDimensionsCount(T value) {
+        if (dimensionsCount < 0) {
+            dimensionsCount = value.dimensionsCount();
+        }
+    }
+
+    private void checkNotNull(T value, String errorMsg) {
+        if (value == null) {
+            throw new IllegalArgumentException(errorMsg);
+        }
+    }
+
+    /**
+     * It's better to use comparison for equality testing, in this way we don't need to rely on equals implementation.
+     * Just iterate over all possible dimensions and compare each value from each dimension for two objects.
+     */
+    private boolean isEquals(T first, T second) {
+        for (int dim = 0; dim < dimensionsCount; ++dim) {
+            if (first.compareWith(second, dim) != 0) {
+                return false;
+            }
+        }
+
+        return true;
     }
 
     private SearchResult<T> find(T valueToSearch) {
@@ -100,7 +103,7 @@ public class KDTree<T extends ComparableDimensions<T>> {
 
             lastNotNull = cur;
 
-            if ( isEquals(cur.value, valueToSearch)) {
+            if (isEquals(cur.value, valueToSearch)) {
                 return SearchResult.withEntry(cur, curDimIndex, lastDirection);
             }
 

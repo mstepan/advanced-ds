@@ -23,7 +23,6 @@ public class KDTreeTest {
 
     @Test
     public void addAndContains() {
-
         XYPoint p1 = new XYPoint(10, 20);
         XYPoint p2 = new XYPoint(5, 20);
         XYPoint p3 = new XYPoint(18, 14);
@@ -33,18 +32,56 @@ public class KDTreeTest {
 
         KDTree<XYPoint> tree = new KDTree<>();
 
-        tree.add(p1);
-        tree.add(p2);
-        tree.add(p3);
+        assertTrue(tree.add(p1));
+        assertTrue(tree.contains(p1));
+        assertFalse(tree.contains(p2));
+        assertFalse(tree.contains(p3));
+        assertFalse(tree.contains(p4));
+        assertFalse(tree.contains(p5));
 
-        assertFalse(tree.isEmpty());
-        assertEquals(3, tree.size());
+        assertTrue(tree.add(p2));
+        assertTrue(tree.contains(p1));
+        assertTrue(tree.contains(p2));
+        assertFalse(tree.contains(p3));
+        assertFalse(tree.contains(p4));
+        assertFalse(tree.contains(p5));
 
+        assertTrue(tree.add(p3));
         assertTrue(tree.contains(p1));
         assertTrue(tree.contains(p2));
         assertTrue(tree.contains(p3));
         assertFalse(tree.contains(p4));
         assertFalse(tree.contains(p5));
+        assertFalse(tree.isEmpty());
+        assertEquals(3, tree.size());
+    }
+
+    @Test
+    public void addAlreadyExistingValues() {
+
+        XYPoint p1 = new XYPoint(10, 20);
+        XYPoint p2 = new XYPoint(5, 20);
+
+        KDTree<XYPoint> tree = new KDTree<>();
+        tree.add(p1);
+        tree.add(p2);
+
+        assertFalse(tree.add(p1));
+        assertFalse(tree.add(p2));
+
+        assertEquals(2, tree.size());
+    }
+
+    @Test
+    public void containsForNullValueShouldReturnFalse() {
+        KDTree<XYPoint> tree = new KDTree<>();
+        assertFalse(tree.contains(null));
+    }
+
+    @Test
+    public void containsForEmptyTree() {
+        KDTree<XYPoint> tree = new KDTree<>();
+        assertFalse(tree.contains(new XYPoint(5, 20)));
     }
 
 }
