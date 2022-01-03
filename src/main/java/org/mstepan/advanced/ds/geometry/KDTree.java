@@ -3,6 +3,10 @@ package org.mstepan.advanced.ds.geometry;
 
 import java.util.Optional;
 
+/**
+ * Good article about K-D tree can be found here:
+ * https://gopalcdas.com/2017/05/24/construction-of-k-d-tree-and-using-it-for-nearest-neighbour-search/
+ */
 public class KDTree<T extends ComparableDimensions<T>> {
 
     private KDEntry<T> root;
@@ -59,9 +63,7 @@ public class KDTree<T extends ComparableDimensions<T>> {
             return null;
         }
 
-        T curValue = curEntry.value;
         T bestChild;
-
         Direction visitedDirection;
 
         // search right
@@ -77,10 +79,12 @@ public class KDTree<T extends ComparableDimensions<T>> {
 
         T bestSoFar = curEntry.value;
 
-        if (distanceSquared(bestChild, searchValue) < distanceSquared(bestSoFar, searchValue)) {
+        if (bestChild != null && distanceSquared(bestChild, searchValue) < distanceSquared(bestSoFar, searchValue)) {
             bestSoFar = bestChild;
         }
 
+        // calculate perpendicular distance squared
+        final T curValue = curEntry.value;
         final int curDim = curEntry.dimensionIndex;
         final int dimPerpendicularDistance = curValue.dimDiff(searchValue, curDim);
         final int dimPerpendicularSquared = dimPerpendicularDistance * dimPerpendicularDistance;
@@ -90,7 +94,7 @@ public class KDTree<T extends ComparableDimensions<T>> {
             bestChild = findNearestRec((visitedDirection == Direction.LEFT) ? curEntry.right : curEntry.left, searchValue);
         }
 
-        if (distanceSquared(bestChild, searchValue) < distanceSquared(bestSoFar, searchValue)) {
+        if (bestChild != null && distanceSquared(bestChild, searchValue) < distanceSquared(bestSoFar, searchValue)) {
             bestSoFar = bestChild;
         }
 

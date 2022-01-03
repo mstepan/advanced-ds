@@ -39,4 +39,21 @@ public final class XYPoint implements ComparableDimensions<XYPoint> {
                                                       dimIndex,
                                                       0, dimensionsCount() - 1));
     }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (!(obj instanceof XYPoint)) {
+            return false;
+        }
+        XYPoint other = (XYPoint) obj;
+        return x == other.x && y == other.y;
+    }
+
+    @Override
+    public int hashCode() {
+        return 31 * x + y;
+    }
 }

@@ -2,14 +2,62 @@ package org.mstepan.advanced.ds.geometry;
 
 import org.junit.jupiter.api.Test;
 
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-/**
- * https://gopalcdas.com/2017/05/24/construction-of-k-d-tree-and-using-it-for-nearest-neighbour-search/
- */
 final class KDTreeTest {
+
+    @Test
+    public void findNearest() {
+        KDTree<XYPoint> tree = new KDTree<>();
+
+        tree.add(new XYPoint(5, 4));
+        tree.add(new XYPoint(2, 6));
+        tree.add(new XYPoint(13, 3));
+        tree.add(new XYPoint(3, 12));
+        tree.add(new XYPoint(10, 2));
+        tree.add(new XYPoint(8, 7));
+
+        final XYPoint searchPoint1 = new XYPoint(9, 4);
+        assertThat(tree.findNearest(searchPoint1)).
+                isNotEmpty().
+                hasValue(new XYPoint(10, 2));
+
+        final XYPoint searchPoint2 = new XYPoint(4, 2);
+        assertThat(tree.findNearest(searchPoint2)).
+                isNotEmpty().
+                hasValue(new XYPoint(5, 4));
+
+        final XYPoint searchPoint3 = new XYPoint(2, 10);
+        assertThat(tree.findNearest(searchPoint3)).
+                isNotEmpty().
+                hasValue(new XYPoint(3, 12));
+
+        final XYPoint searchPoint4 = new XYPoint(15, 5);
+        assertThat(tree.findNearest(searchPoint4)).
+                isNotEmpty().
+                hasValue(new XYPoint(13, 3));
+
+        // exact root match
+        final XYPoint searchPoint5 = new XYPoint(5, 4);
+        assertThat(tree.findNearest(searchPoint5)).
+                isNotEmpty().
+                hasValue(new XYPoint(5, 4));
+
+        // exact leaf match
+        final XYPoint searchPoint6 = new XYPoint(8, 7);
+        assertThat(tree.findNearest(searchPoint6)).
+                isNotEmpty().
+                hasValue(new XYPoint(8, 7));
+
+        // exact node match
+        final XYPoint searchPoint7 = new XYPoint(13, 3);
+        assertThat(tree.findNearest(searchPoint7)).
+                isNotEmpty().
+                hasValue(new XYPoint(13, 3));
+    }
 
     @Test
     public void addToEmptyTree() {
