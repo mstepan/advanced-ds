@@ -1,14 +1,10 @@
-# java 11 template project
+# Advanced DS project.
 
+Requires `java 11` or later.
 
-## Unit tests.
-
-```
-mvn clean test
-```
-
-## Integration tests
+## Build and run unit tests.
 
 ```
-mvn clean test -P integration
+./mvnw clean test
 ```
+

@@ -1,6 +1,6 @@
 package org.mstepan.advanced.ds.geometry;
 
-public class XYPoint implements ComparableDimensions<XYPoint> {
+public final class XYPoint implements ComparableDimensions<XYPoint> {
 
     private final int x;
     private final int y;
@@ -18,6 +18,11 @@ public class XYPoint implements ComparableDimensions<XYPoint> {
     @Override
     public int compareWith(XYPoint other, int dimIndex) {
         return Integer.compare(dimension(dimIndex), other.dimension(dimIndex));
+    }
+
+    @Override
+    public int dimDiff(XYPoint other, int dimIndex) {
+        return dimension(dimIndex) - other.dimension(dimIndex);
     }
 
     private int dimension(int dimIndex) {

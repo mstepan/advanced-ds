@@ -1,6 +1,8 @@
 package org.mstepan.advanced.ds.geometry;
 
 
+import java.util.Optional;
+
 public class KDTree<T extends ComparableDimensions<T>> {
 
     private KDEntry<T> root;
@@ -42,6 +44,70 @@ public class KDTree<T extends ComparableDimensions<T>> {
 
         ++size;
         return true;
+    }
+
+    /**
+     * Find single nearest neighbour closest to 'searchValue' using Euclidean distance as a measurement.
+     */
+    public Optional<T> findNearest(T searchValue) {
+        checkNotNull(searchValue, "Can't search nearest neighbour for 'null' value.");
+        return Optional.ofNullable(findNearestRec(root, searchValue));
+    }
+
+    private T findNearestRec(KDEntry<T> curEntry, T searchValue) {
+        if (curEntry == null) {
+            return null;
+        }
+
+        T curValue = curEntry.value;
+        T bestChild;
+
+        Direction visitedDirection;
+
+        // search right
+        if (searchValue.compareWith(curEntry.value, curEntry.dimensionIndex) >= 0) {
+            visitedDirection = Direction.RIGHT;
+            bestChild = findNearestRec(curEntry.right, searchValue);
+        }
+        // search left
+        else {
+            visitedDirection = Direction.LEFT;
+            bestChild = findNearestRec(curEntry.left, searchValue);
+        }
+
+        T bestSoFar = curEntry.value;
+
+        if (distanceSquared(bestChild, searchValue) < distanceSquared(bestSoFar, searchValue)) {
+            bestSoFar = bestChild;
+        }
+
+        final int curDim = curEntry.dimensionIndex;
+        final int dimPerpendicularDistance = curValue.dimDiff(searchValue, curDim);
+        final int dimPerpendicularSquared = dimPerpendicularDistance * dimPerpendicularDistance;
+
+        // search in opposite direction (was LEFT -> go RIGHT), (was RIGHT -> go LEFT)
+        if (dimPerpendicularSquared < distanceSquared(bestSoFar, searchValue)) {
+            bestChild = findNearestRec((visitedDirection == Direction.LEFT) ? curEntry.right : curEntry.left, searchValue);
+        }
+
+        if (distanceSquared(bestChild, searchValue) < distanceSquared(bestSoFar, searchValue)) {
+            bestSoFar = bestChild;
+        }
+
+        return bestSoFar;
+    }
+
+    /**
+     * distanceSquared = (x1 - x2)^2 + (y1 - y2)^2 + ... + (z1 - z2)^2
+     */
+    private int distanceSquared(T first, T second) {
+        int distSquaredRes = 0;
+
+        for (int dim = 0; dim < dimensionsCount; ++dim) {
+            int diff = first.dimDiff(second, dim);
+            distSquaredRes += (diff * diff);
+        }
+        return distSquaredRes;
     }
 
     public boolean contains(T searchValue) {
