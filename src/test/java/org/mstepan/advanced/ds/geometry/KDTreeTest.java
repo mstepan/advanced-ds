@@ -60,6 +60,14 @@ final class KDTreeTest {
     }
 
     @Test
+    public void findNearestInEmptyTreeShouldReturnEmptyOptional() {
+        KDTree<XYPoint> tree = new KDTree<>();
+
+        assertThat(tree.findNearest(new XYPoint(1, 1))).
+                isEmpty();
+    }
+
+    @Test
     public void addToEmptyTree() {
         KDTree<XYPoint> tree = new KDTree<>();
 
